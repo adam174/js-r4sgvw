@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Evenements javascript</title>
+        <style>
+            .container { max-width: 1000px; margin: 0 auto; padding: 20px; border: 1px solid; }
+            .bouton { padding: 10px 25px; background-color: #333; color: white; border-radius: 5px; cursor: pointer; border: 0; }
+            input, select { width: 350px; height: 30px; border: 1px solid lightslategray; padding-left: 5px; }
+            
+        </style>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+    </head>
+    <body>
+        <div class="container">
+        <hr>
+            <div id="message" ></div>
+            <form method="" action="" id="monForm">
+                <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo...">
+                <br>
+                <br>
+                <input type="text" name="email" id="email" placeholder="Email..." >
+                <br>
+                <br>
+                <label>Ville</label><br>
+                <select id="choix" name="choix">
+                    <option value=""></option>
+                    <option value="paris">Paris</option>
+                    <option value="lille">Lille</option>
+                    <option value="montpellier">Montpellier</option>
+                    <option value="lyon">Lyon</option>
+                    <option value="marseille">Marseille</option>
+                    <option value="orleans">Orleans</option>
+                    <option value="nice">Nice</option>
+                </select>
+                <hr>
+                <button type="submit" id="boutonFrom" class="bouton">Valider</button>
+            </form>
+
+<hr>
+<i id="links" class="fa fa-link" aria-hidden="true"></i>
+</div>
+
+<script>
+    // EVENEMENT FOCUS (lorsque l'on rentre dans un champ de formulaire)
+var mesInputs = document.getElementsByTagName('input');
+// la selection par tagName (nom de balise) nous renvoie une collection. Pour appliquer un événement à tous ces éléments, il faut faire une boucle.
+for(var i in mesInputs.length) {
+    mesInputs[i].addEventListener('focus', function () {
+        this.style.border = '4px solid steelblue';
+    });
+}
+
+// EVENEMENT BLUR (lorsque l'on sort d'un champ) avec une boucle while
+var y = 0;
+while(y < mesInputs.length) {
+
+    mesInputs[y].addEventListener('blur', function () {
+        this.style.border = '1px solid lightslategray';
+    });
+
+    y++;
+}
+
+
+document.getElementById('monForm').addEventListener("submit", function (e) {
+
+    e.preventDefault();
+
+            /*----------------------------------------
+                    Declaring Variables, 
+            -----------------------------------------*/
+
+    var pseudoValue =  document.getElementById('pseudo').value;
+    var eValue      =  document.getElementById('email').value;
+    var ville      =  document.getElementById('choix').value;
+    var usernamevalid, emailvalid, villevalid;
+    pseudoValue = pseudoValue.trim();
+    eValue = eValue.trim();
+    var atposition  =  eValue.indexOf("@");  
+    var dotposition =  eValue.lastIndexOf(".");  
+
+        /*----------------------------------------
+                    Checking username, 
+        -----------------------------------------*/
+
+    if(pseudoValue.length < 5 || pseudoValue.length > 15) {
+        usernamevalid = false;
+    } else {
+        usernamevalid = true;
+        document.getElementById('message').innerHTML = "";
+        document.getElementById('pseudo').style.border = "";
+    }
+
+        /*----------------------------------------
+                    Checking Email, 
+        -----------------------------------------*/
+
+
+if (atposition < 3 || dotposition < atposition+4 || dotposition+2 >= eValue.length){  
+    // dotposition+2 : minimun 2 characteres(com fr etc) // dotposition < atposition+4 : minimum 3 characteres dans le domain//
+   
+    emailvalid = false;
+  }else{
+    emailvalid = true;
+    document.getElementById('message').innerHTML = "";
+    document.getElementById('email').style.border = "";
+  }
+
+           /*----------------------------------------
+                    Checking City, 
+            -----------------------------------------*/
+
+      console.log(ville);
+    if(ville==""){
+ 
+        villevalid = false;
+    }else{
+        villevalid = true;
+        document.getElementById('choix').style.border = "";
+
+    }  
+
+            /*----------------------------------------
+                   Validating Check Before Submit, 
+             -----------------------------------------*/
+            if(!usernamevalid){
+            document.getElementById('message').innerHTML = "<p style='padding: 10px; background-color: red; color: white; margin-top: 10px;'>Attention, le pseudo doit avoir entre 5 et 15 caractères inclus,<br>Veuillez recommencer votre saisie</p>";
+            document.getElementById('pseudo').style.border = "3px solid red";
+            
+             }else if(!emailvalid){
+                 document.getElementById('message').innerHTML += "<p style='padding: 10px; background-color: red; color: white; margin-top: 10px;'>Attention, Veuillez saisir l'email format (email@mail.com)</p>";    
+                  // rajouter une bordure rouge sur le champ concerné
+                document.getElementById('email').style.border = "3px solid red";
+            }else if(!villevalid){
+                    document.getElementById('message').innerHTML += "<p style='padding: 10px; background-color: red; color: white; margin-top: 10px;'>Attention, Veuillez Choisir la ville</p>";    
+                    document.getElementById('choix').style.border = "3px solid red";
+            }
+
+                            /*----------------------------------------
+                                    Last Check Then Submit, 
+                            -----------------------------------------*/
+
+            if(usernamevalid && emailvalid && villevalid)  {   this.submit(); }
+});
+
+document.getElementById('links').addEventListener("click",function(){
+    //window.location = 'http://www.google.fr';
+    window.open('http://www.google.fr', '_blank');
+    
+})
+
+</script>
+
+    
+</body>
+</html>
